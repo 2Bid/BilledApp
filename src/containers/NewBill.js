@@ -21,7 +21,7 @@ export default class NewBill {
 
     if(file.type !== 'image/png' && file.type !== 'image/jpeg'){
       e.target.value = ''
-      alert('Choisissez un fichier au bon format')
+      alert('Choisissez un fichier au bon format (jpg, jpeg ou png)')
       return
     }
     
