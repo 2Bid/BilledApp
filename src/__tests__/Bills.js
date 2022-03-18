@@ -11,7 +11,8 @@ import { localStorageMock } from '../__mocks__/localStorage.js'
 
 import router from '../app/Router.js'
 import BillsContainer from '../containers/Bills'
-import storeMock from '../__mocks__/store'
+import mockStore from '../__mocks__/store'
+
 
 describe('Given I am connected as an employee', () => {
   describe('When I am on Bills Page', () => {
@@ -55,7 +56,7 @@ describe('Given I am connected as an employee', () => {
       const billsContainer = new BillsContainer({
         document: document,
         onNavigate: onNavigate,
-        store: storeMock,
+        store: mockStore,
         localStorage: localStorageMock,
       })
       const buttonNewBill = screen.getByTestId('btn-new-bill')
@@ -88,7 +89,7 @@ describe('Given I am connected as an employee', () => {
       const billsContainer = new BillsContainer({
         document: document,
         onNavigate: onNavigate,
-        store: storeMock,
+        store: mockStore,
         localStorage: localStorageMock,
       })
       const iconsEye = screen.getAllByTestId('icon-eye')
@@ -96,5 +97,89 @@ describe('Given I am connected as an employee', () => {
       userEvent.click(iconEye)
       expect(modalMock).toHaveBeenCalled()
     })
+  })
+})
+
+// test d'intégration GET
+describe("Given I am a user connected as Employee", () => {
+  describe("When I navigate to Bills", () => {
+    test("fetches bills from mock API GET", async () => {
+      localStorage.setItem("user", JSON.stringify({ type: "Employee", email: "a@a" }));
+      const root = document.createElement("div")
+      root.setAttribute("id", "root")
+      document.body.append(root)
+      router()
+      window.onNavigate(ROUTES_PATH.Bills)
+      await waitFor(() => screen.getByText("Mes notes de frais"))
+      const openNewBill  = await screen.getByText("Nouvelle note de frais")
+      expect(openNewBill).toBeTruthy()
+    })
+  describe("When an error occurs on API", () => {
+    // beforeEach(() => {
+    //   jest.spyOn(mockStore, "bills")
+    //   Object.defineProperty(
+    //       window,
+    //       'localStorage',
+    //       { value: localStorageMock }
+    //   )
+    //   window.localStorage.setItem('user', JSON.stringify({
+    //     type: 'Employee',
+    //     email: "a@a"
+    //   }))
+    //   const root = document.createElement("div")
+    //   root.setAttribute("id", "root")
+    //   document.body.appendChild(root)
+    //   router()
+    // })
+    test("fetches bills from an API and fails with 404 message error", async () => {
+      // jest.mock("../app/store", () => {
+      //   return mockStore
+      // })
+      jest.spyOn(mockStore, "bills")
+      Object.defineProperty(
+          window,
+          'localStorage',
+          { value: localStorageMock }
+      )
+      window.localStorage.setItem('user', JSON.stringify({
+        type: 'Employee',
+        email: "a@a"
+      }))
+      const root = document.createElement("div")
+      root.setAttribute("id", "root")
+      document.body.appendChild(root)
+      router()
+      console.log(window.onNavigate)
+      mockStore.bills.mockImplementationOnce(() => {
+        return {
+          list : () =>  {
+            return Promise.reject(new Error("Erreur 404"))
+          }
+        }})
+        console.log(ROUTES_PATH.Bills)
+      window.onNavigate(ROUTES_PATH.Bills)
+      // await new Promise(process.nextTick);
+      // const message = await screen.getByText(/Erreur 404/)
+      // expect(message).toBeTruthy()
+    })
+
+    test("fetches messages from an API and fails with 500 message error", async () => {
+      // jest.mock("../app/store", () => {
+      //   return mockStore
+      // })
+      mockStore.bills.mockImplementationOnce(() => {
+        return {
+          list : () =>  {
+            return Promise.reject(new Error("Erreur 500"))
+          }
+        }})
+
+      window.onNavigate(ROUTES_PATH.Bills)
+      await new Promise(process.nextTick);
+      const message = await screen.getByText(/Erreur 500/)
+      expect(message).toBeTruthy()
+    })
+  })
+
   })
 })

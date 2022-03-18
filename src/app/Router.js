@@ -90,6 +90,7 @@ export default () => {
         divIcon2.classList.remove('active-icon')
         new Bills({ document, onNavigate, store, localStorage })
       }).catch(error => {
+        console.log(error)
         rootDiv.innerHTML = ROUTES({ pathname: window.location.hash, error })
       })
     } else if (window.location.hash === ROUTES_PATH['NewBill']) {
