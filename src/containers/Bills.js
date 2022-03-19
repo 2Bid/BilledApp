@@ -53,9 +53,6 @@ export default class {
           })
         return bills
       })
-      .catch(e => {
-        throw e
-      })
     }
   }
 }

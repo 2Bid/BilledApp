@@ -1,17 +1,28 @@
 /**
  * @jest-environment jsdom
  */
+//  import { screen, waitFor} from "@testing-library/dom"
+//  import userEvent from '@testing-library/user-event'
+//  import { ROUTES, ROUTES_PATH } from "../constants/routes.js"
+//  import { localStorageMock } from "../__mocks__/localStorage.js"
+//  import mockStore from "../__mocks__/store"
+//  import { bills } from "../fixtures/bills.js"
+//  import router from "../app/Router"
+// import BillsUI from '../views/BillsUI.js'
+// import BillsContainer from '../containers/Bills'
 
 import { screen, waitFor} from '@testing-library/dom'
 import userEvent from '@testing-library/user-event'
-import BillsUI from '../views/BillsUI.js'
-import { bills } from '../fixtures/bills.js'
-import { ROUTES, ROUTES_PATH } from '../constants/routes.js'
+import { ROUTES, ROUTES_PATH } from "../constants/routes.js"
 import { localStorageMock } from '../__mocks__/localStorage.js'
-
+import mockStore from "../__mocks__/store"
+import { bills } from '../fixtures/bills.js'
 import router from '../app/Router.js'
+import BillsUI from '../views/BillsUI.js'
 import BillsContainer from '../containers/Bills'
-import mockStore from '../__mocks__/store'
+
+
+jest.mock("../app/store", () => mockStore)
 
 
 describe('Given I am connected as an employee', () => {
@@ -115,26 +126,23 @@ describe("Given I am a user connected as Employee", () => {
       expect(openNewBill).toBeTruthy()
     })
   describe("When an error occurs on API", () => {
-    // beforeEach(() => {
-    //   jest.spyOn(mockStore, "bills")
-    //   Object.defineProperty(
-    //       window,
-    //       'localStorage',
-    //       { value: localStorageMock }
-    //   )
-    //   window.localStorage.setItem('user', JSON.stringify({
-    //     type: 'Employee',
-    //     email: "a@a"
-    //   }))
-    //   const root = document.createElement("div")
-    //   root.setAttribute("id", "root")
-    //   document.body.appendChild(root)
-    //   router()
-    // })
+    beforeEach(() => {
+      jest.spyOn(mockStore, "bills")
+      Object.defineProperty(
+          window,
+          'localStorage',
+          { value: localStorageMock }
+      )
+      window.localStorage.setItem('user', JSON.stringify({
+        type: 'Employee',
+        email: "a@a"
+      }))
+      const root = document.createElement("div")
+      root.setAttribute("id", "root")
+      document.body.appendChild(root)
+      router()
+    })
     test("fetches bills from an API and fails with 404 message error", async () => {
-      // jest.mock("../app/store", () => {
-      //   return mockStore
-      // })
       jest.spyOn(mockStore, "bills")
       Object.defineProperty(
           window,
@@ -158,15 +166,12 @@ describe("Given I am a user connected as Employee", () => {
         }})
         console.log(ROUTES_PATH.Bills)
       window.onNavigate(ROUTES_PATH.Bills)
-      // await new Promise(process.nextTick);
-      // const message = await screen.getByText(/Erreur 404/)
-      // expect(message).toBeTruthy()
+      await new Promise(process.nextTick);
+      const message = await screen.getByText(/Erreur 404/)
+      expect(message).toBeTruthy()
     })
 
     test("fetches messages from an API and fails with 500 message error", async () => {
-      // jest.mock("../app/store", () => {
-      //   return mockStore
-      // })
       mockStore.bills.mockImplementationOnce(() => {
         return {
           list : () =>  {
