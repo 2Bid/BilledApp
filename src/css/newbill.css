@@ -37,6 +37,15 @@ label {
   color: #fff;
 }
 
+.input-file-error{
+  display: none;
+  color: red;
+}
+
+.input-file-error.active{
+  display: block;
+}
+
 #btn-send-bill {
   width: 100px;
   background-color: #0E5AE5;

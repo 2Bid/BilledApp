@@ -1,15 +1,6 @@
 /**
  * @jest-environment jsdom
  */
-//  import { screen, waitFor} from "@testing-library/dom"
-//  import userEvent from '@testing-library/user-event'
-//  import { ROUTES, ROUTES_PATH } from "../constants/routes.js"
-//  import { localStorageMock } from "../__mocks__/localStorage.js"
-//  import mockStore from "../__mocks__/store"
-//  import { bills } from "../fixtures/bills.js"
-//  import router from "../app/Router"
-// import BillsUI from '../views/BillsUI.js'
-// import BillsContainer from '../containers/Bills'
 
 import { screen, waitFor} from '@testing-library/dom'
 import userEvent from '@testing-library/user-event'
@@ -143,20 +134,6 @@ describe("Given I am a user connected as Employee", () => {
       router()
     })
     test("fetches bills from an API and fails with 404 message error", async () => {
-      jest.spyOn(mockStore, "bills")
-      Object.defineProperty(
-          window,
-          'localStorage',
-          { value: localStorageMock }
-      )
-      window.localStorage.setItem('user', JSON.stringify({
-        type: 'Employee',
-        email: "a@a"
-      }))
-      const root = document.createElement("div")
-      root.setAttribute("id", "root")
-      document.body.appendChild(root)
-      router()
       console.log(window.onNavigate)
       mockStore.bills.mockImplementationOnce(() => {
         return {

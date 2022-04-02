@@ -19,12 +19,14 @@ export default class NewBill {
   }
   handleChangeFile = (e) => {
     e.preventDefault();
-    const file = this.document.querySelector(`input[data-testid="file"]`)
-      .files[0];
+    const file = this.document.querySelector(`input[data-testid="file"]`).files[0];
+    const inputFileError = this.document.getElementsByClassName('input-file-error')[0]
+    inputFileError.className = ('input-file-error')
 
     if (file.type !== "image/png" && file.type !== "image/jpeg") {
       e.target.value = "";
-      alert("Choisissez un fichier au bon format (jpg, jpeg ou png)");
+      inputFileError.className = ('input-file-error active')
+      console.log('ok')
       return;
     }
 
