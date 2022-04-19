@@ -26,7 +26,6 @@ export default class NewBill {
     if (file.type !== "image/png" && file.type !== "image/jpeg") {
       e.target.value = "";
       inputFileError.className = ('input-file-error active')
-      console.log('ok')
       return;
     }
 

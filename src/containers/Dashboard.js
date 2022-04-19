@@ -28,16 +28,13 @@ export const filteredBills = (data, status) => {
 }
 
 export const card = (bill) => {
-  const firstAndLastNames = bill.email.split('@')[0]
-  const firstName = firstAndLastNames.includes('.') ?
-    firstAndLastNames.split('.')[0] : ''
-  const lastName = firstAndLastNames.includes('.') ?
-  firstAndLastNames.split('.')[1] : firstAndLastNames
+
+  const fileName = bill.fileName.replace(/\.[^.]*$/, '')
 
   return (`
     <div class='bill-card' id='open-bill${bill.id}' data-testid='open-bill${bill.id}'>
       <div class='bill-card-name-container'>
-        <div class='bill-card-name'> ${firstName} ${lastName} </div>
+        <div class='bill-card-name'> ${fileName} </div>
         <span class='bill-card-grey'> ... </span>
       </div>
       <div class='name-price-container'>
