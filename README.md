@@ -1,6 +1,4 @@
-# AxelSalenbier_9_01022022
-
-# "BilledApp" #
+# BilledApp #
 
 ## Projet numéro 9 de ma formation OpenClassrooms ##
 
