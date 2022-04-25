@@ -134,14 +134,12 @@ describe("Given I am a user connected as Employee", () => {
       router()
     })
     test("fetches bills from an API and fails with 404 message error", async () => {
-      console.log(window.onNavigate)
       mockStore.bills.mockImplementationOnce(() => {
         return {
           list : () =>  {
             return Promise.reject(new Error("Erreur 404"))
           }
         }})
-        console.log(ROUTES_PATH.Bills)
       window.onNavigate(ROUTES_PATH.Bills)
       await new Promise(process.nextTick);
       const message = await screen.getByText(/Erreur 404/)

@@ -58,7 +58,6 @@ describe("Given I am connected as an employee", () => {
       })
       const inputFileErrorMsg = screen.getByTestId('msg-file-error')
       expect(inputFileErrorMsg).toBeTruthy()
-      console.log(inputFileErrorMsg.innerHTML)
       expect(inputFileErrorMsg.classList.contains('active')).toBeTruthy()
 
       fireEvent.change(screen.getByTestId('file'), {
